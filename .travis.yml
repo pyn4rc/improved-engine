@@ -25,5 +25,4 @@ script:
 
 after_success:
   - docker-compose down
-  - ls -la
-  - codecov
+  - bash <(curl -s https://codecov.io/bash)
