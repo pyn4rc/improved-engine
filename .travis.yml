@@ -10,3 +10,4 @@ script:
   - docker-compose exec web python manage.py test
 after_success:
   - docker-compose down
+  - cd src && codecov
