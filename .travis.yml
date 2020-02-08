@@ -1,3 +1,5 @@
+dist: trusty
+sudo: required
 language: python
 
 python:
@@ -8,13 +10,23 @@ before_install:
   - pip install pipenv codecov
 
 install:
+  - curl -sSL "https://get.docker.com/gpg" | sudo -E apt-key add -
+  - echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get update
+  - sudo apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --assume-yes install docker-engine
+  - docker version
+  - sudo pip install docker-compose
+  - docker-compose version
   - pipenv install --system --dev --deploy
 
-before_script: cd src
+before_script:
+  - docker-compose up --build -d
+  - cd src
 
 script:
   - python manage.py migrate
   - coverage run manage.py test
 
 after_success:
+  - docker-compose down
   - codecov
