@@ -3,27 +3,10 @@ language: generic
 services:
   - docker
 env:
-  - DEBUG=0
-  - SECRET_KEY=secret
-before_install:
-  - docker-compose up -d
-
-install:
-  - curl -sSL "https://get.docker.com/gpg" | sudo -E apt-key add -
-  - echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update
-  - sudo apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --assume-yes install docker-engine
-  - docker version
-  - sudo pip install docker-compose
-  - docker-compose version
-  - pipenv install --system --dev --deploy
-
+  - DEBUG=1 SECRET_KEY=secret POSTGRES_USER=u1 POSTGRES_PASSWORD=pwd POSTGRES_DB=u1_db POSTGRES_HOST=db POSTGRES_PORT=5432
 before_script:
   - docker-compose up --build -d
-  - cd src
-
 script:
   - docker-compose exec web python manage.py test
-
 after_success:
   - docker-compose down
