@@ -3,18 +3,26 @@ language: python
 python:
   - 3.7
 
+sudo: required
+
+services:
+  - docker
+
 before_install:
+  - docker version
+  - docker-compose version
   - pip install -U pip
   - pip install pipenv codecov
 
-install:
-  - pipenv install --system --dev --deploy
+env:
+  - DJANGO_WEB=0 DJANGO_STATIC=0 DJANGO_MIGRATE=0 DEBUG=0 SECRET_KEY=secret POSTGRES_USER=u1 POSTGRES_PASSWORD=pwd POSTGRES_DB=u1_db POSTGRES_HOST=db POSTGRES_PORT=5432
 
-before_script: cd src
+before_script:
+  - docker-compose build
 
 script:
-  - python manage.py migrate
-  - coverage run manage.py test
+  - docker-compose run -v $PWD:/coverage --entrypoint="" web sh -c 'COVERAGE_FILE=/coverage/.coverage coverage run --source=. manage.py test'
 
 after_success:
+  - docker-compose down
   - codecov

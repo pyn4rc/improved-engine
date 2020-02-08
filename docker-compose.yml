@@ -1,0 +1,46 @@
+version: "3.7"
+
+x-web-settings: &web-settings
+  DEBUG: "${DEBUG}"
+  DJANGO_WEB: "${DJANGO_WEB}"
+  DJANGO_STATIC: "${DJANGO_STATIC}"
+  DJANGO_MIGRATE: "${DJANGO_MIGRATE}"
+  SECRET_KEY: "${SECRET_KEY}"
+
+x-db-settings: &db-settings
+  POSTGRES_USER: "${POSTGRES_USER}"
+  POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+  POSTGRES_DB: "${POSTGRES_DB}"
+
+x-db-conn-settings: &db-conn-settings
+  POSTGRES_HOST: "${POSTGRES_HOST}"
+  POSTGRES_PORT: "${POSTGRES_PORT}"
+
+services:
+  db:
+    image: mdillon/postgis:9.5-alpine
+    environment:
+      <<: *db-settings
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  web:
+    build:
+      context: .
+      dockerfile: ./devops/Dockerfile
+    image: improved_engine/web:1.0
+    environment:
+      <<: *web-settings
+      <<: *db-settings
+      <<: *db-conn-settings
+    volumes:
+      - ./src:/opt/improved_engine
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+volumes:
+  pg_data:
+    driver: local
