@@ -22,6 +22,7 @@ before_script:
 
 script:
   - docker-compose run -v $PWD:/coverage --entrypoint="" web sh -c 'COVERAGE_FILE=/coverage/.coverage coverage run --source=. manage.py test'
+  - ls
 
 after_success:
   - docker-compose down
