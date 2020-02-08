@@ -1,13 +1,12 @@
-dist: trusty
 sudo: required
-language: python
-
-python:
-  - 3.7
-
+language: generic
+services:
+  - docker
+env:
+  - DEBUG=0
+  - SECRET_KEY=secret
 before_install:
-  - pip install -U pip
-  - pip install pipenv codecov
+  - docker-compose up -d
 
 install:
   - curl -sSL "https://get.docker.com/gpg" | sudo -E apt-key add -
@@ -24,9 +23,7 @@ before_script:
   - cd src
 
 script:
-  - python manage.py migrate
-  - coverage run manage.py test
+  - docker-compose exec web python manage.py test
 
 after_success:
   - docker-compose down
-  - codecov
