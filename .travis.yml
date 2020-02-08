@@ -1,3 +1,8 @@
+language: python
+
+python:
+  - 3.7
+
 sudo: required
 
 services:
@@ -6,13 +11,18 @@ services:
 before_install:
   - docker version
   - docker-compose version
+  - pip install -U pip
+  - pip install pipenv codecov
 
 env:
-  - DJANGO_WEB=1 DJANGO_STATIC=0 DJANGO_MIGRATE=1 DEBUG=1 SECRET_KEY=secret POSTGRES_USER=u1 POSTGRES_PASSWORD=pwd POSTGRES_DB=u1_db POSTGRES_HOST=db POSTGRES_PORT=5432
+  - DJANGO_WEB=0 DJANGO_STATIC=0 DJANGO_MIGRATE=0 DEBUG=0 SECRET_KEY=secret POSTGRES_USER=u1 POSTGRES_PASSWORD=pwd POSTGRES_DB=u1_db POSTGRES_HOST=db POSTGRES_PORT=5432
 
 before_script:
   - docker-compose build
+
 script:
-  - docker-compose run -v $PWD:/coverage web sh -c 'pip install coverage && COVERAGE_FILE=/coverage/.coverage coverage run --source=. manage.py test'
+  - docker-compose run web coverage run --source=. manage.py test'
+
 after_success:
   - docker-compose down
+  - codecov
