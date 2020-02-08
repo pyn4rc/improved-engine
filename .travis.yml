@@ -14,7 +14,7 @@ before_script: cd src
 
 script:
   - python manage.py migrate
-  - python manage.py test
+  - coverage run python manage.py test
 
 after_success:
   - codecov
