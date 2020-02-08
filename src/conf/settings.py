@@ -15,6 +15,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'cities',
+    'api',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,3 +68,12 @@ USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+CITIES_DATA_DIR = rhea_config.get_string('CITIES_DATA_DIR', default='/tmp/', is_optional=True)
+CITIES_FILES = {
+    'city': {
+        'filenames': ['RU.zip', ],
+        'urls':      ['http://download.geonames.org/export/dump/'+'{filename}']
+    },
+}
+CITIES_LOCALES = ['ru', ]
+CITIES_POSTAL_CODES = ['RU', ]
