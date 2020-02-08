@@ -3,7 +3,7 @@ language: generic
 services:
   - docker
 env:
-  - DEBUG=1 SECRET_KEY=secret POSTGRES_USER=u1 POSTGRES_PASSWORD=pwd POSTGRES_DB=u1_db POSTGRES_HOST=db POSTGRES_PORT=5432
+  - DJANGO_WEB=1 DJANGO_STATIC=0 DJANGO_MIGRATE=1 DEBUG=1 SECRET_KEY=secret POSTGRES_USER=u1 POSTGRES_PASSWORD=pwd POSTGRES_DB=u1_db POSTGRES_HOST=db POSTGRES_PORT=5432
 before_script:
   - docker-compose up --build -d
 script:
