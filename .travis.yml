@@ -21,7 +21,7 @@ before_script:
   - docker-compose build
 
 script:
-  - docker-compose run --entrypoint="" web coverage run --source=. manage.py test'
+  - docker-compose run --entrypoint="" web coverage run --source=. manage.py test
 
 after_success:
   - docker-compose down
