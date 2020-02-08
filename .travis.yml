@@ -1,0 +1,17 @@
+language: python
+
+python:
+  - 3.7
+
+before_install:
+  - pip install -U pip
+  - pip install pipenv
+
+install:
+  - pipenv install --system --dev --deploy
+
+before_script: cd src
+
+script:
+  - python manage.py migrate
+  - python manage.py test
