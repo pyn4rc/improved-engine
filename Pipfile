@@ -7,7 +7,7 @@ verify_ssl = true
 coverage = "*"
 
 [packages]
-django = "==2.2.10"
+django = "==2.2.20"
 rhea = "==0.5.5"
 psycopg2-binary = "==2.8.4"
 django-cities = "==0.5.0.6"
